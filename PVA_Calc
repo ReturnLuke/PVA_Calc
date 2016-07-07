@@ -1,0 +1,89 @@
+//Calculates the present value of an annuity.
+//Requires accountant.gif image within directory.
+
+import sys
+import math
+from tkinter import *
+import tkinter.messagebox
+
+mGui = Tk()
+mGui.configure(background = "white")
+
+img = PhotoImage(file='accountant.gif')
+mGui.tk.call("wm", "iconphoto", mGui._w, img)
+
+AP1 = DoubleVar()
+EIR2 = DoubleVar()
+NY3 = DoubleVar()
+PPY4 = DoubleVar()
+
+#Start Menu
+
+menu = Menu(mGui)
+mGui.config(menu = menu)
+
+fileMenu = Menu(menu)
+menu.add_cascade(label= "File", menu = fileMenu)
+fileMenu.add_command(label= "Exit", command = mGui.quit)
+
+subMenu = Menu(menu)
+menu.add_cascade(label = "SetUp", menu = subMenu)
+is_checked1 = IntVar()
+is_checked2 = IntVar()
+subMenu.add_checkbutton(label = "InAdvance", onvalue = 1, offvalue = 0, variable = is_checked1)
+subMenu.add_checkbutton(label = "Continuous", onvalue = 1, offvalue = 0, variable = is_checked2)
+
+def About():
+    tkinter.messagebox.showinfo("About", "Luke Watson, 2014-2015")
+helpmenu = Menu(menu)
+menu.add_cascade(label = "Help", menu = helpmenu)
+helpmenu.add_command(label = "About", command = About)
+
+#End Menu
+
+def calculate():
+    AP = AP1.get()
+    EIR = EIR2.get()
+    EIR = EIR / 100
+    NY = NY3.get()
+    PPY = PPY4.get()
+    if is_checked2.get():
+        PPY = 1
+        CONT = EIR/math.log(1+EIR)
+        IP = EIR / (PPY * ((1 + EIR) ** (1 / PPY) - 1))
+        RESULT = AP * (((1 - (1 / (1 + EIR) ** NY)) / EIR) * IP * CONT)
+        if is_checked1.get():
+            RESULT *= (1 + EIR)
+            FRESULT = "{0:.2f}".format(RESULT)
+            tkinter.messagebox.showinfo("", FRESULT)
+        else:
+            FRESULT = "{0:.2f}".format(RESULT)
+            tkinter.messagebox.showinfo("", FRESULT)
+    else:
+        IP = EIR / (PPY * ((1 + EIR) ** (1 / PPY) - 1))
+        RESULT = AP * (((1 - (1 / (1 + EIR) ** NY)) / EIR) * IP)
+        if is_checked1.get():
+            RESULT *= (1 + EIR)
+            FRESULT = "{0:.2f}".format(RESULT)
+            tkinter.messagebox.showinfo("", FRESULT)
+        else:
+            FRESULT = "{0:.2f}".format(RESULT)
+            tkinter.messagebox.showinfo("", FRESULT)
+
+mGui.geometry("220x275+500+150")
+mGui.title("PVA Calculator")
+mlabel0 = Label(mGui, text = " ", background = "white").pack()
+mlabel1 = Label(mGui, text = "Annualised payment: ", background = "white").pack()
+mEntry1 = Entry(mGui, textvariable = AP1, background = "white").pack()
+mlabel2 = Label(mGui, text = "Effective interest rate: ", background = "white").pack()
+mEntry2 = Entry(mGui, textvariable = EIR2, background = "white").pack()
+mlabel3 = Label(mGui, text = "Number of years: ", background = "white").pack()
+mEntry3 = Entry(mGui, textvariable = NY3, background = "white").pack()
+mlabel4 = Label(mGui, text = "Payments per year: ", background = "white").pack()
+mEntry4 = Entry(mGui, textvariable = PPY4, background = "white").pack()
+mlabel5 = Label(mGui, text = " ", background = "white").pack()
+mButton = Button(mGui, text = "Calculate", command = calculate,
+                 background = "white", relief = "groove").pack()
+mEntry6 = Label(mGui, text = "", background = "white").pack()
+
+mGui.mainloop()
