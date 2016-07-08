@@ -34,7 +34,7 @@ subMenu.add_checkbutton(label = "InAdvance", onvalue = 1, offvalue = 0, variable
 subMenu.add_checkbutton(label = "Continuous", onvalue = 1, offvalue = 0, variable = is_checked2)
 
 def About():
-    tkinter.messagebox.showinfo("About", "Luke Watson, 2014-2015")
+    tkinter.messagebox.showinfo("About", "Luke Watson")
 helpmenu = Menu(menu)
 menu.add_cascade(label = "Help", menu = helpmenu)
 helpmenu.add_command(label = "About", command = About)
